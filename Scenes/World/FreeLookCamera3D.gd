@@ -13,10 +13,6 @@ const YAW_SENSITIVITY = 0.01;
 
 var isGameWindowFocused = true;
 
-var up = Vector3.UP;
-var left = Vector3.LEFT;
-var forward = Vector3.FORWARD;
-
 func _ready():
 	get_viewport().warp_mouse(get_viewport().size / 2.0) # reset cursor at the center of the viewport
 	return;
