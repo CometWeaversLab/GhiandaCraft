@@ -5,46 +5,65 @@ extends Node3D
 
 @onready var texture = load("res://Assets/Textures/UVCheckGrid_1024x1024.png");
 
-const cubeSize = 1;
-var cubeMesh : Mesh;
-var cubeMaterial : Material;
-var cubeRIDs = [];
+var meshInstancesRIDs = Array();
 
 func _ready():
-	# prepare the material
-	cubeMaterial = StandardMaterial3D.new();
-	cubeMaterial.albedo_color = Color(0.0, 1.0, 0.0);
-	#cubeMaterial.albedo_texture = texture;
-	cubeMaterial.uv1_scale = Vector3(3, 2, 1); # same texture for every face
-	cubeMaterial.texture_repeat = true; #default
-
-	# prepare the mesh
-	cubeMesh = BoxMesh.new();
-	cubeMesh.set_size(Vector3(cubeSize, cubeSize, cubeSize));
-	cubeMesh.surface_set_material(0, cubeMaterial);
+	var quadMesh = CubeManager.meshQuad;
 	
-	# alloracate blocks
+	var scenario = get_world_3d().scenario;
+	
 	TerrainManager.initTerrain();
-	var chunkstotal = TerrainManager.loadedChunks.keys().size();
-	cubeRIDs.resize(TerrainManager.CHUNK_SIZE_BLOCKS * chunkstotal);
 	
-	for chunk_x in range(0, 1):
-		for chunk_z in range(0, 1):
-			var chunk = TerrainManager.loadedChunks[Vector2(chunk_x,chunk_z)];
-			# render blocks
-			for cubeIndex in TerrainManager.CHUNK_SIZE_BLOCKS:
-				var blockId = chunk.blockId[cubeIndex];
-				if(blockId != 0):
-					var chunkCoord = TerrainManager.chunkIndexToChunkCoord(cubeIndex);
-					var cubeTransform = Transform3D(Basis.IDENTITY, Vector3( \
-					chunkCoord.x + (chunk_x * TerrainManager.CHUNK_WIDTH_BLOCKS), \
-						chunkCoord.y - TerrainManager.CHUNK_WIDTH_BLOCKS / 2, \
-						chunkCoord.z + (chunk_z * TerrainManager.CHUNK_WIDTH_BLOCKS) \
-					) * cubeSize);
-					cubeRIDs[cubeIndex] = RenderingServer.instance_create(); # create a new instance
-					RenderingServer.instance_set_base(cubeRIDs[cubeIndex], cubeMesh); # set the instance mesh
-					RenderingServer.instance_set_scenario(cubeRIDs[cubeIndex], get_world_3d().scenario);
-					RenderingServer.instance_set_transform(cubeRIDs[cubeIndex], cubeTransform);
+	var loadedChunksKeys = TerrainManager.loadedChunks.keys();
+	meshInstancesRIDs.resize(TerrainManager.CHUNK_SIZE_BLOCKS * loadedChunksKeys.size());
+	
+	var quadCounter = 0;
+	for chunkKey in loadedChunksKeys:
+		var chunk = TerrainManager.loadedChunks[chunkKey];
+		# render blocks
+		for y in TerrainManager.CHUNK_HEIGHT_BLOCKS:
+			for x in TerrainManager.CHUNK_WIDTH_BLOCKS:
+				for z in TerrainManager.CHUNK_WIDTH_BLOCKS:
+					var blockType = chunk.blocks[y][x][z];
+					var blockId = TerrainManager.chunkCoordToChunkIndex(Vector3(x, y, z));
+					if(blockType != CubeManager.BLOCK_TYPE.EMPTY):
+						# capisco quali facce sono visibili
+						var isTopVisible = (TerrainManager.getBlock(chunkKey.x, chunkKey.y, x, y + 1, z) == CubeManager.BLOCK_TYPE.EMPTY);
+						var isFrontVisible = (TerrainManager.getBlock(chunkKey.x, chunkKey.y, x, y, z - 1) == CubeManager.BLOCK_TYPE.EMPTY);
+						var isLeftVisible = (TerrainManager.getBlock(chunkKey.x, chunkKey.y, x + 1, y, z) == CubeManager.BLOCK_TYPE.EMPTY);
+						var isBackVisible = (TerrainManager.getBlock(chunkKey.x, chunkKey.y, x, y, z + 1) == CubeManager.BLOCK_TYPE.EMPTY);
+						var isRightVisible = (TerrainManager.getBlock(chunkKey.x, chunkKey.y, x - 1, y, z) == CubeManager.BLOCK_TYPE.EMPTY);
+						var isBottomVisible = (TerrainManager.getBlock(chunkKey.x, chunkKey.y, x, y - 1, z) == CubeManager.BLOCK_TYPE.EMPTY);
+						
+						# TODO qui devo fare una somma di trasformazioni
+						var cubeTransform = Vector3( \
+							x + (chunkKey.x * TerrainManager.CHUNK_WIDTH_BLOCKS), \
+							y - TerrainManager.CHUNK_WIDTH_BLOCKS / 2, \
+							z + (chunkKey.y * TerrainManager.CHUNK_WIDTH_BLOCKS) \
+						);
+						
+						# cree la meshInstance delle facce
+						meshInstancesRIDs[blockId] = Array();
+						meshInstancesRIDs[blockId].resize(6);
+						if(isTopVisible):
+							meshInstancesRIDs[blockId][0] = CubeManager.createBlockTopFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
+							quadCounter += 1;
+						if(isFrontVisible):
+							meshInstancesRIDs[blockId][1] = CubeManager.createBlockFrontFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
+							quadCounter += 1;
+						if(isLeftVisible):
+							meshInstancesRIDs[blockId][2] = CubeManager.createBlockLeftFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
+							quadCounter += 1;
+						if(isBackVisible):
+							meshInstancesRIDs[blockId][3] = CubeManager.createBlockBackFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
+							quadCounter += 1;
+						if(isRightVisible):
+							meshInstancesRIDs[blockId][4] = CubeManager.createBlockRightFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
+							quadCounter += 1;
+						if(isBottomVisible):
+							meshInstancesRIDs[blockId][5] = CubeManager.createBlockBottomFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
+							quadCounter += 1;
+	print("QUAD COUNT: ", quadCounter)
 	return;
 	
 func _process(delta):

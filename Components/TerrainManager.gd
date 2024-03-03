@@ -6,7 +6,7 @@
 # Therefore, the convention for the terrain coordinates is the following:
 # - the y axis points "up"
 # - the z axis points "forward"
-# - the x axis points "left"
+# - the x axis points "right"
 # The maximum height of the world is defined as 256. Therefore the y axis of the world ranges 
 # from -127 to 126 (included), where 0 should represents the sea-level of the world.
 #
@@ -22,7 +22,7 @@ const CHUNK_SIZE_BLOCKS = CHUNK_HEIGHT_BLOCKS * CHUNK_WIDTH_BLOCKS * CHUNK_WIDTH
 
 # A chunk is a contiguous memory portion that contains terrain information.
 class TerrainChunk:
-	var blockId = [];
+	var blocks = Array();
 
 var loadedChunks = {};
 
@@ -48,21 +48,50 @@ func initTerrain():
 	#noise.fractal_lacunarity = 2
 	#noise.fractal_gain = 0.5
 	
-	for chunk_x in range(0, 1):
-		for chunk_z in range(0, 1):
+	for chunk_x in range(-2, 2):
+		for chunk_z in range(-2, 2):
 			
 			var newChunk = TerrainChunk.new();
-			newChunk.blockId.resize(CHUNK_SIZE_BLOCKS);
-			for x in CHUNK_WIDTH_BLOCKS:
-				for z in CHUNK_WIDTH_BLOCKS:
-					var noisev = noise.get_noise_2d(x + chunk_x * CHUNK_WIDTH_BLOCKS, z + chunk_z * CHUNK_WIDTH_BLOCKS); # between -1 and 1
-					var worldHeight = (noisev + 1) / 2 * CHUNK_HEIGHT_BLOCKS;
-					for y in CHUNK_HEIGHT_BLOCKS:
+			newChunk.blocks.resize(CHUNK_HEIGHT_BLOCKS);
+			for y in CHUNK_HEIGHT_BLOCKS:
+				newChunk.blocks[y] = Array();
+				newChunk.blocks[y].resize(CHUNK_WIDTH_BLOCKS);
+				for x in CHUNK_WIDTH_BLOCKS:
+					newChunk.blocks[y][x] = Array();
+					newChunk.blocks[y][x].resize(CHUNK_WIDTH_BLOCKS);
+					for z in CHUNK_WIDTH_BLOCKS:
+						var noisev = noise.get_noise_2d(x + chunk_x * CHUNK_WIDTH_BLOCKS, z + chunk_z * CHUNK_WIDTH_BLOCKS); # between -1 and 1
+						var worldHeight = (noisev + 1) / 2 * CHUNK_HEIGHT_BLOCKS;
 						var chunkIndex = chunkCoordToChunkIndex(Vector3(x, y, z));
 						if(y <= worldHeight):
-							newChunk.blockId[chunkIndex] = 1; # grass
+							newChunk.blocks[y][x][z] = CubeManager.BLOCK_TYPE.GRASS;
 						else:
-							newChunk.blockId[chunkIndex] = 0; # empty
+							newChunk.blocks[y][x][z] = CubeManager.BLOCK_TYPE.EMPTY;
 			loadedChunks[Vector2(chunk_x,chunk_z)] = newChunk;
 	return;
 	
+func getBlock(chunk_x: int, chunk_z: int, x: int, y: int, z: int) -> int:
+	var chunk_delta_x = 0;
+	var chunk_delta_z = 0;
+	var delta_x = 0;
+	var delta_z = 0;
+	if(y < 0 || y >= CHUNK_HEIGHT_BLOCKS):
+		return CubeManager.BLOCK_TYPE.EMPTY; # sempre vuoto
+	if(x < 0):
+		chunk_delta_x =- 1;
+		delta_x += CHUNK_WIDTH_BLOCKS;
+	if(x >= CHUNK_WIDTH_BLOCKS):
+		chunk_delta_x =+ 1;
+		delta_x -= CHUNK_WIDTH_BLOCKS;
+	if(z < 0):
+		chunk_delta_z =- 1;
+		delta_z += CHUNK_WIDTH_BLOCKS;
+	if(z >= CHUNK_WIDTH_BLOCKS):
+		chunk_delta_z =+ 1;
+		delta_z -= CHUNK_WIDTH_BLOCKS;
+	
+	var key = Vector2(chunk_x + chunk_delta_x, chunk_z + chunk_delta_z)
+	if(!loadedChunks.has(key)):
+		return CubeManager.BLOCK_TYPE.EMPTY;
+	var chunk = loadedChunks[key];
+	return chunk.blocks[y][x + delta_x][z + delta_z];
