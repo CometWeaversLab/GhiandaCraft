@@ -11,6 +11,9 @@ var cubeMaterial;
 var cubeRIDs = [];
 
 func _ready():	
+	SaveWord.save()
+	SaveWord.load()
+	
 	# prepare the material
 	cubeMaterial = StandardMaterial3D.new();
 	cubeMaterial.albedo_color = Color(1.0, 1.0, 1.0);
