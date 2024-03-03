@@ -11,10 +11,20 @@ config_version=5
 [application]
 
 config/name="GhiandaCraft"
-run/main_scene="res://Scenes/World/World.tscn"
+run/main_scene="res://Scenes/World/Game3D.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 SaveWord="*res://Modules/File_menager/Save_word.gd"
+TerrainManager="*res://Components/TerrainManager.gd"
+CubeManager="*res://Components/CubeManager.gd"
+
+[display]
+
+window/vsync/vsync_mode=2
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.392157, 0.584314, 0.929412, 1)

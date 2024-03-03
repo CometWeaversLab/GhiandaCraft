@@ -5,11 +5,11 @@
 
 extends Camera3D
 
-const SPEED_BASE   = 1.0;
-const SPEED_SPRINT = 4.0;
+const SPEED_BASE   = 8;
+const SPEED_SPRINT = 16;
 const MOUSE_SENSITIVITY_X = 0.002;
 const MOUSE_SENSITIVITY_Y = 0.002;
-const YAW_SENSITIVITY = 0.01;
+const YAW_SENSITIVITY = 0.005;
 
 var isGameWindowFocused = true;
 
@@ -26,7 +26,8 @@ func _notification(event):
 	return;
 
 # FIXME inputs (mouse and keyboard) and hence movement and rotation,
-# should be checked in _physics_process(..) instead. Good enough for now.
+# should be checked in _physics_process(..) instead. OTHERWISE at low fps
+# the input will be slower (example camera movement). Good enough for now.
 func _process(delta):
 	if(!isGameWindowFocused): 
 		return;
