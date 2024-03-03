@@ -14,3 +14,16 @@ config/name="GhiandaCraft"
 run/main_scene="res://Scenes/World/World.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+TerrainManager="*res://Components/TerrainManager.gd"
+CubeManager="*res://Components/CubeManager.gd"
+
+[display]
+
+window/vsync/vsync_mode=2
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.392157, 0.584314, 0.929412, 1)
