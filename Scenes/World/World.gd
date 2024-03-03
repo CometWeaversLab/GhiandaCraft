@@ -11,7 +11,7 @@ var cubeMaterial;
 var cubeRIDs = [];
 
 func _ready():	
-# prepare the material
+	# prepare the material
 	cubeMaterial = StandardMaterial3D.new();
 	cubeMaterial.albedo_color = Color(1.0, 1.0, 1.0);
 	cubeMaterial.albedo_texture = texture;
