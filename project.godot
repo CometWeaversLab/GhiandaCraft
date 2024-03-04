@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+SaveWord="*res://Modules/File_menager/Save_word.gd"
 TerrainManager="*res://Components/TerrainManager.gd"
 CubeManager="*res://Components/CubeManager.gd"
 
