@@ -14,12 +14,13 @@ func _ready():
 	
 	TerrainManager.initTerrain();
 	
-	var loadedChunksKeys = TerrainManager.loadedChunks.keys();
+	print_debug("Calculating geometry...")
+	var loadedChunksKeys = TerrainManager.terrainChunks.keys();
 	meshInstancesRIDs.resize(TerrainManager.CHUNK_SIZE_BLOCKS * loadedChunksKeys.size());
 	
 	var quadCounter = 0;
 	for chunkKey in loadedChunksKeys:
-		var chunk = TerrainManager.loadedChunks[chunkKey];
+		var chunk = TerrainManager.terrainChunks[chunkKey];
 		# render blocks
 		for y in TerrainManager.CHUNK_HEIGHT_BLOCKS:
 			for x in TerrainManager.CHUNK_WIDTH_BLOCKS:
@@ -63,7 +64,7 @@ func _ready():
 						if(isBottomVisible):
 							meshInstancesRIDs[blockId][5] = CubeManager.createBlockBottomFace(scenario, CubeManager.BLOCK_TYPE.GRASS, cubeTransform);
 							quadCounter += 1;
-	print("QUAD COUNT: ", quadCounter)
+	print_debug("Total Quad count: ", quadCounter)
 	return;
 	
 func _process(delta):

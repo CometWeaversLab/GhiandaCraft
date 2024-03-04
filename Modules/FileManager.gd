@@ -1,5 +1,9 @@
 extends Node
 
+# user://
+# On Windows: %APPDATA%\Godot\app_userdata\ProjectName
+# On GNU/Linux: $HOME/.godot/app_userdata/ProjectName
+
 """
 Save the contents of a byte buffer to a file.
 
@@ -8,7 +12,6 @@ Save the contents of a byte buffer to a file.
 :param byteBuffer: The byte buffer containing the data to be saved.
 :type byteBuffer: Array
 """
-
 func save(filePath: String, byteBuffer: Array):
 	var packedByteArray = PackedByteArray(byteBuffer)
 	
@@ -25,9 +28,8 @@ Load the contents of a file into a byte buffer.
 :return: The byte buffer containing the data read from the file.
 :rtype: Array
 """
-
 func load(filePath: String) -> Array:
 	var f = FileAccess.open("user://" + filePath, FileAccess.READ)
-	var readBack = f.get_buffer(f.get_len())
+	var readBack = f.get_buffer(f.get_length())
 	f.close()
 	return readBack
