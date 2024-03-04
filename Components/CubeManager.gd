@@ -60,6 +60,7 @@ func createMaterialFromTexture(texture: Texture) -> Material:
 	var material = StandardMaterial3D.new();
 	material.albedo_texture = texture;
 	material.texture_repeat = false;
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
 	return material;
 	
 func createBlockTopFace(scenario: RID, blockType: BLOCK_TYPE, position: Vector3) -> RID:
