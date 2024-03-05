@@ -108,8 +108,8 @@ func initTerrain():
 	
 	# Leonardo: chunk loading works, but need to check if the file already exists
 	# before doing it...
-	#for chunk_x in range(-2, 2):
-	#	for chunk_z in range(-2, 2):
+	#for chunk_x in range(-1, 2):
+	#	for chunk_z in range(-1, 2):
 	#		loadTerrainChunkFromDisk(chunk_x, chunk_z);
 	#return;
 	

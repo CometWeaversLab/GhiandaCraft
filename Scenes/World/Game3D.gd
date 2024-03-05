@@ -6,16 +6,38 @@ extends Node3D
 @onready var texture = load("res://Assets/Textures/UVCheckGrid_1024x1024.png");
 
 var meshInstancesRIDs = Array();
+var lineRID = [];
 
 func _ready():
 	# disable lighting for this version of the game. TODO remove in the future.
 	get_viewport().debug_draw = Viewport.DEBUG_DRAW_UNSHADED;
 	
-	
+
 	var quadMesh = CubeManager.meshQuad;
 	
 	var scenario = get_world_3d().scenario;
 	
+	# chunk lines (test)
+	# ricorda che ciascun blocco ha come coordinate il centro della propria faccia superiore,
+	# pertanto su x e z va traslato di 0.5, e su y va translato di un intero blocco!
+	# TODO il colore ancora non passa allo shader. vorrei trovare un modo di passarlo come uniform
+	# senza dover creare una copia del material...
+	lineRID.resize(12);
+	lineRID[0] = CubeManager.createLine(scenario, Vector3( 0-0.5, -1,  0-0.5), Vector3( 0-0.5, -1, 16-0.5), Color.RED);
+	lineRID[1] = CubeManager.createLine(scenario, Vector3( 0-0.5, -1,  0-0.5), Vector3(16-0.5, -1,  0-0.5), Color.RED);
+	lineRID[2] = CubeManager.createLine(scenario, Vector3(16-0.5, -1,  0-0.5), Vector3(16-0.5, -1, 16-0.5), Color.RED);
+	lineRID[3] = CubeManager.createLine(scenario, Vector3( 0-0.5, -1, 16-0.5), Vector3(16-0.5, -1, 16-0.5), Color.RED);
+	
+	lineRID[4] = CubeManager.createLine(scenario, Vector3(0-0.5,256-1,0-0.5), Vector3(0-0.5,256-1,16-0.5), Color.RED);
+	lineRID[5] = CubeManager.createLine(scenario, Vector3(0-0.5,256-1,0-0.5), Vector3(16-0.5,256-1,0-0.5), Color.RED);
+	lineRID[6] = CubeManager.createLine(scenario, Vector3(16-0.5,256-1,0-0.5), Vector3(16-0.5,256-1,16-0.5), Color.RED);
+	lineRID[7] = CubeManager.createLine(scenario, Vector3(0-0.5,256-1,16-0.5), Vector3(16-0.5,256-1,16-0.5), Color.RED);
+	
+	lineRID[8] = CubeManager.createLine(scenario, Vector3(0-0.5,-1,0-0.5), Vector3(0-0.5,256-1,0-0.5), Color.RED);
+	lineRID[9] = CubeManager.createLine(scenario, Vector3(16-0.5,-1,0-0.5), Vector3(16-0.5,256-1,0-0.5), Color.RED);
+	lineRID[10] = CubeManager.createLine(scenario, Vector3(16-0.5,-1,16-0.5), Vector3(16-0.5,256-1,16-0.5), Color.RED);
+	lineRID[11] = CubeManager.createLine(scenario, Vector3(0-0.5,-1,16-0.5), Vector3(0-0.5,256-1,16-0.5), Color.RED);
+
 	TerrainManager.initTerrain();
 	
 	print_debug("Calculating geometry...")
@@ -43,7 +65,7 @@ func _ready():
 						# TODO qui devo fare una somma di trasformazioni
 						var cubeTransform = Vector3( \
 							x + (chunkKey.x * TerrainManager.CHUNK_WIDTH_BLOCKS), \
-							y - TerrainManager.CHUNK_WIDTH_BLOCKS / 2, \
+							y, \
 							z + (chunkKey.y * TerrainManager.CHUNK_WIDTH_BLOCKS) \
 						);
 						
