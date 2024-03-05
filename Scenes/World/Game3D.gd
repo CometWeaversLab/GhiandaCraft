@@ -20,8 +20,6 @@ func _ready():
 	# chunk lines (test)
 	# ricorda che ciascun blocco ha come coordinate il centro della propria faccia superiore,
 	# pertanto su x e z va traslato di 0.5, e su y va translato di un intero blocco!
-	# TODO il colore ancora non passa allo shader. vorrei trovare un modo di passarlo come uniform
-	# senza dover creare una copia del material...
 	lineRID.resize(12);
 	lineRID[0] = CubeManager.createLine(scenario, Vector3( 0-0.5, -1,  0-0.5), Vector3( 0-0.5, -1, 16-0.5), Color.RED);
 	lineRID[1] = CubeManager.createLine(scenario, Vector3( 0-0.5, -1,  0-0.5), Vector3(16-0.5, -1,  0-0.5), Color.RED);
