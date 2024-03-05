@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 TerrainManager="*res://Modules/TerrainManager.gd"
 CubeManager="*res://Modules/CubeManager.gd"
 FileManager="*res://Modules/FileManager.gd"
+DebugManager="*res://Modules/DebugManager.gd"
 
 [display]
 

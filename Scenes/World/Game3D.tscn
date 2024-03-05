@@ -1,8 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://fv10808a8lqj"]
+[gd_scene load_steps=7 format=3 uid="uid://fv10808a8lqj"]
 
 [ext_resource type="Script" path="res://Scenes/World/Game3D.gd" id="1_2an5a"]
 [ext_resource type="Script" path="res://Scenes/World/DebugLabel.gd" id="2_0i8vu"]
 [ext_resource type="Script" path="res://Scenes/World/FreeLookCamera3D.gd" id="3_vi5we"]
+[ext_resource type="Shader" path="res://Shaders/wireframe.gdshader" id="4_okelg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmx5g"]
+render_priority = 0
+shader = ExtResource("4_okelg")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/wire_color = Color(0, 0, 0, 1)
+shader_parameter/wire_width = 5.0
+shader_parameter/wire_smoothness = 0.01
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_c1iow"]
+material = SubResource("ShaderMaterial_pmx5g")
 
 [node name="Game3D" type="Node3D"]
 script = ExtResource("1_2an5a")
@@ -27,3 +39,7 @@ metadata/_edit_lock_ = true
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.147809, -0.973991, 0.171741, 0, 0.173648, 0.984808, -0.989016, -0.145564, 0.0256668, 0, 0, 0)
 metadata/_edit_lock_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.91826, 0, 0)
+mesh = SubResource("TubeTrailMesh_c1iow")

@@ -8,6 +8,10 @@ extends Node3D
 var meshInstancesRIDs = Array();
 
 func _ready():
+	# disable lighting for this version of the game. TODO remove in the future.
+	get_viewport().debug_draw = Viewport.DEBUG_DRAW_UNSHADED;
+	
+	
 	var quadMesh = CubeManager.meshQuad;
 	
 	var scenario = get_world_3d().scenario;

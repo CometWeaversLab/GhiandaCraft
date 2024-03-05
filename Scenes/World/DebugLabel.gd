@@ -7,11 +7,15 @@ extends Label
 @onready var gameCamera : Camera3D = get_node("/root/Game3D/FreeLookCamera3D");
 
 func _process(delta):
-	self.text = getFpsString(delta) \
+	self.text = "[Performance]" \
+		+ "\n" + getFpsString(delta) \
 		+ "\n" + getMonitorString() \
 		+ "\n" + getCpuString() \
 		+ "\n" + getGpuString() \
-		+ "\n\n\n" + getCameraPosition() \
+		+ "\n\n[Rendering]" \
+		+ "\n" + getViewportInfo() \
+		+ "\n\n[Player]" \
+		+ "\n" + getCameraPosition() \
 		+ "\n" + getCameraRotation();
 	return;
 
@@ -52,6 +56,10 @@ func getFpsLimitString():
 	if fpsLimit == 0:
 		return "unlimited";
 	return str(fpsLimit);
+
+func getViewportInfo():
+	var viewportOverlayMode = DebugManager.getViewportOverlayMode();
+	return "[F3] Rendering Overlay: " + DebugManager.nameOfViewportDebugDraw(viewportOverlayMode) + " (" + str(viewportOverlayMode) + ")";
 
 func getCameraPosition():
 	return "Position: (x: " + str(snapped(gameCamera.position.x, 0.01)) \
