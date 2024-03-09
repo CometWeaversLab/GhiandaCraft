@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cwxusqccmrm7d"
-path="res://.godot/imported/UVCheckGrid_1024x1024.png-f13c333a848a9aaf6c8e4f03e72af0a7.ctex"
+path="res://.godot/imported/UVCheckGrid_1024x1024.png-b44de7a44605e99d649622ce83e1829b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/UVCheckGrid_1024x1024.png"
-dest_files=["res://.godot/imported/UVCheckGrid_1024x1024.png-f13c333a848a9aaf6c8e4f03e72af0a7.ctex"]
+source_file="res://assets/textures/UVCheckGrid_1024x1024.png"
+dest_files=["res://.godot/imported/UVCheckGrid_1024x1024.png-b44de7a44605e99d649622ce83e1829b.ctex"]
 
 [params]
 

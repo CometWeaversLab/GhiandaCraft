@@ -113,8 +113,8 @@ func initTerrain():
 	#		loadTerrainChunkFromDisk(chunk_x, chunk_z);
 	#return;
 	
-	for chunk_x in range(-2, 2):
-		for chunk_z in range(-2, 2):
+	for chunk_x in range(0, 1):
+		for chunk_z in range(0, 1):
 			
 			var newChunk = TerrainChunk.new();
 			newChunk.blocks.resize(CHUNK_HEIGHT_BLOCKS);

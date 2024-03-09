@@ -29,15 +29,15 @@ var materialShader : Material;
 @export var materialsDictionary = Dictionary(); # potrebbe essere un array?
 
 # textures
-@onready var textureGrassBack = load("res://Assets/Textures/Dirt_Back.png");
-@onready var textureGrassBottom = load("res://Assets/Textures/Dirt_Bottom.png");
-@onready var textureGrassFront = load("res://Assets/Textures/Dirt_Front.png");
-@onready var textureGrassLeft = load("res://Assets/Textures/Dirt_Left.png");
-@onready var textureGrassRight = load("res://Assets/Textures/Dirt_Right.png");
-@onready var textureGrassTop = load("res://Assets/Textures/Dirt_Top.png");
+@onready var textureGrassBack = load("res://assets/Textures/Dirt_Back.png");
+@onready var textureGrassBottom = load("res://assets/Textures/Dirt_Bottom.png");
+@onready var textureGrassFront = load("res://assets/Textures/Dirt_Front.png");
+@onready var textureGrassLeft = load("res://assets/Textures/Dirt_Left.png");
+@onready var textureGrassRight = load("res://assets/Textures/Dirt_Right.png");
+@onready var textureGrassTop = load("res://assets/Textures/Dirt_Top.png");
 
 # shaders
-@onready var shaderBasic = load("res://Shaders/basic.gdshader");
+@onready var shaderBasic = load("res://shaders/basic.gdshader");
 
 func _ready():
 	self.materialShader = ShaderMaterial.new();

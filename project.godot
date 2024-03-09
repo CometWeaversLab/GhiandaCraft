@@ -11,16 +11,18 @@ config_version=5
 [application]
 
 config/name="GhiandaCraft"
-run/main_scene="res://Scenes/World/Game3D.tscn"
+run/main_scene="res://scenes/world/Game3D.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/icons/icon.svg"
 
 [autoload]
 
-TerrainManager="*res://Modules/TerrainManager.gd"
-CubeManager="*res://Modules/CubeManager.gd"
-FileManager="*res://Modules/FileManager.gd"
-DebugManager="*res://Modules/DebugManager.gd"
+GameNetServer="*res://modules/networking/GameNetServer.gd"
+GameNetClient="*res://modules/networking/GameNetClient.gd"
+TerrainManager="*res://modules/TerrainManager.gd"
+CubeManager="*res://modules/CubeManager.gd"
+FileManager="*res://modules/FileManager.gd"
+DebugManager="*res://modules/DebugManager.gd"
 
 [display]
 

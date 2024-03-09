@@ -3,12 +3,15 @@
 # Author: Leonardo Spaccini
 extends Node3D
 
-@onready var texture = load("res://Assets/Textures/UVCheckGrid_1024x1024.png");
-
 var meshInstancesRIDs = Array();
 var lineRID = [];
 
 func _ready():
+	# Initialize a single-player network server
+	GameNetServer.initializeForSingleplayer();
+	# initialize a single-player network client
+	GameNetClient.initializeForSingleplayer();
+	
 	# disable lighting for this version of the game. TODO remove in the future.
 	get_viewport().debug_draw = Viewport.DEBUG_DRAW_UNSHADED;
 	
