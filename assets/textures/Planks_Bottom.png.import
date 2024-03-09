@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t1m4qehywi8y"
-path="res://.godot/imported/Dirt_Bottom.png-128092aed469ffae8a63b02e3dd82515.ctex"
+uid="uid://dqb4md6qa88yd"
+path="res://.godot/imported/Planks_Bottom.png-14ccbc6e4341655cad1c785f53a5559b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/Dirt_Bottom.png"
-dest_files=["res://.godot/imported/Dirt_Bottom.png-128092aed469ffae8a63b02e3dd82515.ctex"]
+source_file="res://assets/textures/Planks_Bottom.png"
+dest_files=["res://.godot/imported/Planks_Bottom.png-14ccbc6e4341655cad1c785f53a5559b.ctex"]
 
 [params]
 
@@ -23,9 +23,9 @@ compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false
 mipmaps/limit=-1
-roughness/mode=1
+roughness/mode=0
 roughness/src_normal=""
-process/fix_alpha_border=false
+process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false

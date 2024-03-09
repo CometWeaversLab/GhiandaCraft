@@ -29,12 +29,10 @@ var materialShader : Material;
 @export var materialsDictionary = Dictionary(); # potrebbe essere un array?
 
 # textures
-@onready var textureGrassBack = load("res://assets/Textures/Dirt_Back.png");
-@onready var textureGrassBottom = load("res://assets/Textures/Dirt_Bottom.png");
-@onready var textureGrassFront = load("res://assets/Textures/Dirt_Front.png");
-@onready var textureGrassLeft = load("res://assets/Textures/Dirt_Left.png");
-@onready var textureGrassRight = load("res://assets/Textures/Dirt_Right.png");
-@onready var textureGrassTop = load("res://assets/Textures/Dirt_Top.png");
+@onready var textureGrassTop = load("res://assets/Textures/Grass_Top.png");
+@onready var textureGrassSide = load("res://assets/Textures/Grass_Side.png");
+@onready var textureGrassBottom = load("res://assets/Textures/Grass_Bottom.png");
+
 
 # shaders
 @onready var shaderBasic = load("res://shaders/basic.gdshader");
@@ -59,22 +57,19 @@ func _ready():
 
 	
 	# create the materials
-	var materialGrassBack = createMaterialFromTexture(textureGrassBack);
-	var materialGrassBottom = createMaterialFromTexture(textureGrassBottom);
-	var materialGrassFront = createMaterialFromTexture(textureGrassFront);
-	var materialGrassLeft = createMaterialFromTexture(textureGrassLeft);
-	var materialGrassRight = createMaterialFromTexture(textureGrassRight);
 	var materialGrassTop = createMaterialFromTexture(textureGrassTop);
+	var materialGrassSide = createMaterialFromTexture(textureGrassSide);
+	var materialGrassBottom = createMaterialFromTexture(textureGrassBottom);
 	
 	# intialize material dictionary
 	var grassMaterialArray = Array();
 	grassMaterialArray.resize(BLOCK_FACE.size());
-	grassMaterialArray[BLOCK_FACE.BACK] = materialGrassBack;
-	grassMaterialArray[BLOCK_FACE.BOTTOM] = materialGrassBottom;
-	grassMaterialArray[BLOCK_FACE.FRONT] = materialGrassFront;
-	grassMaterialArray[BLOCK_FACE.LEFT] = materialGrassLeft;
-	grassMaterialArray[BLOCK_FACE.RIGHT] = materialGrassRight;
 	grassMaterialArray[BLOCK_FACE.TOP] = materialGrassTop;
+	grassMaterialArray[BLOCK_FACE.BACK] = materialGrassSide;
+	grassMaterialArray[BLOCK_FACE.FRONT] = materialGrassSide;
+	grassMaterialArray[BLOCK_FACE.LEFT] = materialGrassSide;
+	grassMaterialArray[BLOCK_FACE.RIGHT] = materialGrassSide;
+	grassMaterialArray[BLOCK_FACE.BOTTOM] = materialGrassBottom;
 	
 	materialsDictionary[BLOCK_TYPE.GRASS] = grassMaterialArray;
 	return;
