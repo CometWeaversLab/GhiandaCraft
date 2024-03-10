@@ -5,6 +5,21 @@ extends Node
 # On GNU/Linux: $HOME/.godot/app_userdata/ProjectName
 
 """
+Check if the file exists at the specified path.
+
+:param filePath: The path to the file to be checked.
+:type filePath: String
+:return: True if the file exists, False otherwise.
+:rtype: bool
+"""
+func fileExists(filePath: String) -> bool:
+	var f = FileAccess.open("user://" + filePath, FileAccess.READ)
+	var exists = f != null
+	if f:
+		f.close()
+	return exists
+
+"""
 Save the contents of a byte buffer to a file.
 
 :param filePath: The path to the file where the byte buffer will be saved.
