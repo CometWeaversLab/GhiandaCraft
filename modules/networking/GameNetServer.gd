@@ -59,7 +59,7 @@ func _serverAcceptNewConnections():
 		var tcpConnectionPort = tcpConnection.get_connected_port();
 		var tcpConnectionStatus = tcpConnection.get_status();
 		var tcpConnectionSocket = tcpConnectionAddress + ":" + str(tcpConnectionPort);
-		print_rich("[color=magenta][SERVER] Accepted connection from " + tcpConnectionSocket + "/tcp (status: " + _parseStatus(tcpConnectionStatus) + ")");
+		print_rich("[color=magenta][SERVER] Accepted connection from " + tcpConnectionSocket + "/tcp (status: " + GameNetUtils.parseTcpConnectionStatus(tcpConnectionStatus) + ")");
 		# Store the connection inside the dictionary, using the socket as a key (since it is unique).
 # tcpConnection.set_no_delay(true);
 		tcpConnections[tcpConnectionSocket] = tcpConnection;
@@ -83,17 +83,49 @@ func _serverProcessConnection(tcpConnection: StreamPeerTCP):
 			_serverProcessPacket(tcpConnection, streamBufferBytes);
 	return;
 
-# FIXME non è detto che il pacchetto che ricevo sia completo. in caso non lo sia,
-# memorizzarlo in un buffer specifico di ogni connessione e riprovare successivamente.
 func _serverProcessPacket(tcpConnection: StreamPeerTCP, packetBytes: Array):
+	# FIXME non è detto che il pacchetto che ricevo sia completo. in caso non lo sia,
+	# memorizzarlo in un buffer specifico di ogni connessione e riprovare successivamente.
+	# print_rich("[color=magenta][SERVER] Receiving packet from " + tcpConnectionSocket + " with content bytes: " + str(packetBytes));
+	#var packetLen = (packetBytes[0] << 8) + packetBytes[1];
+	var packetCommand = packetBytes[0];
+	match packetCommand:
+		GameNetPacketManager.PacketType.TERRAIN_DATA_REQ:
+			_processTerrainDataRequest(tcpConnection, packetBytes) 
+	return;
+
+func _processTerrainDataRequest(tcpConnection: StreamPeerTCP, packetBytes: Array):
 	var tcpConnectionAddress = tcpConnection.get_connected_host();
 	var tcpConnectionPort = tcpConnection.get_connected_port();
-	var tcpConnectionSocket = tcpConnectionAddress + ":" + str(tcpConnectionPort);
-	print_rich("[color=magenta][SERVER] Receiving packet from " + tcpConnectionSocket + " with content bytes: " + str(packetBytes));
+	var tcpConnectionSocket = tcpConnectionAddress + ":" + str(tcpConnectionPort) + "/tcp";
+	var requestContent = GameNetPacketManager.parseTerrainDataReq(packetBytes);
+	var requestedChunkX = requestContent[0];
+	var requestedChunkZ = requestContent[1];
+	# FIXME non è detto che il pacchetto che ricevo sia completo. in caso non lo sia,
+	# memorizzarlo in un buffer specifico di ogni connessione e riprovare successivamente.
+	print_rich("[color=magenta][SERVER] <" + tcpConnectionSocket + "> Receiving terrain data request for chunk (" + str(requestedChunkX) + ", " + str(requestedChunkZ) + ")...");
+	
+	# Response
+	_responseTerrainData(tcpConnection, requestedChunkX, requestedChunkZ);
+	return;
+
+func _responseTerrainData(tcpConnection: StreamPeerTCP, chunk_x: int, chunk_z: int):
+	var tcpConnectionAddress = tcpConnection.get_connected_host();
+	var tcpConnectionPort = tcpConnection.get_connected_port();
+	var tcpConnectionSocket = tcpConnectionAddress + ":" + str(tcpConnectionPort) + "/tcp";
+	print_rich("[color=magenta][SERVER] <" + tcpConnectionSocket + "> Sending terrain data response for chunk (" + str(chunk_x) + ", " + str(chunk_z) + ")...");
+	# SEND BACK TEST TERRAIN DATA
+	var terrainData = [1,2,3,4];
+	var response = GameNetPacketManager.createTerrainDataRes(chunk_x, chunk_z, terrainData);
+	_sendResponse(tcpConnection, response);
 	return;
 	
-func _parseStatus(status : StreamPeerTCP.Status):
-	if(status == 0): return "Not Connected";
-	elif(status == 1): return "Connecting";
-	elif(status == 2): return "Connected";
-	elif(status == 3): return "Error";
+func _sendResponse(tcpConnection: StreamPeerTCP, packetBytes: PackedByteArray):
+	var tcpConnectionStatus = tcpConnection.get_status();
+	if(tcpConnectionStatus != StreamPeerTCP.STATUS_CONNECTED):
+		printerr("[SERVER] Could not send response to client! Connection status is \": " + GameNetUtils.parseTcpConnectionStatus(tcpConnectionStatus) + "\"");
+		return;
+	var errorCode = tcpConnection.put_data(packetBytes);
+	if(errorCode != Error.OK):
+		printerr("[SERVER] Could not send response to client! (error code: " + str(errorCode) + ")");
+	return;
