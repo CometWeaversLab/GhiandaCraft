@@ -13,11 +13,7 @@ Check if the file exists at the specified path.
 :rtype: bool
 """
 func fileExists(filePath: String) -> bool:
-	var f = FileAccess.open("user://" + filePath, FileAccess.READ)
-	var exists = f != null
-	if f:
-		f.close()
-	return exists
+	return FileAccess.file_exists("user://" + filePath);
 
 """
 Save the contents of a byte buffer to a file.
