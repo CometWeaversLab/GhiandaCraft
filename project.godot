@@ -19,6 +19,8 @@ config/icon="res://assets/icons/icon.svg"
 
 GameNetServer="*res://modules/networking/GameNetServer.gd"
 GameNetClient="*res://modules/networking/GameNetClient.gd"
+GameNetPacketManager="*res://modules/networking/GameNetPacketManager.gd"
+GameNetUtils="*res://modules/networking/GameNetUtils.gd"
 TerrainManager="*res://modules/TerrainManager.gd"
 CubeManager="*res://modules/CubeManager.gd"
 FileManager="*res://modules/FileManager.gd"
